@@ -1,33 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, Suspense, lazy, } from 'react'
+import { Navigate, Route, Routes } from "react-router-dom";
+import LoaderGlobal from "./components/Loader/LoaderGlobal/LoaderGlobal";
+import Layout from "./layout/Layout";
+
+const Main = lazy(() => import('./pages/1.Main/MainPage'));
+const Prices = lazy(() => import("./pages/2.Prices/PricesPage"));
+const Gallery = lazy(() => import("./pages/3.Gallery/GalleryPage"));
+const Competitions = lazy(() => import("./pages/4.Competitions/CompetitionsPage"));
+const Contacts = lazy(() => import("./pages/5.Contacts/ContactsPage"));
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [lang, setLang] = useState('eng')
+
+  const funcChangeLanguage = (evt) => {    
+    const currentLang = evt.currentTarget.value.toLowerCase()    
+    setLang(currentLang);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-         on the Vite and React logos to learn more
-      </p>
+    <Suspense fallback={<LoaderGlobal />}>
+      <Routes>
+        <Route path="/" element={<Layout lang={lang} funcChangeLanguage={funcChangeLanguage}/>}>
+          <Route index element={<Main />} />
+          <Route path="prices" element={<Prices lang={lang}/>} />
+          <Route path="gallery" element={<Gallery lang={lang}/>} />
+          <Route path="competitions" element={<Competitions lang={lang}/>} />
+          <Route path="contacts" element={<Contacts lang={lang}/>} />
+          <Route path="*" element={<Navigate to="/" />}></Route>
+        </Route>
+      </Routes>
+    </Suspense>
+      
     </>
   )
 }
