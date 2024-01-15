@@ -5,7 +5,13 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <App basename={import.meta.env.BASE_URL}/> */}
-    <App />
+    <App basename={import.meta.env.BASE_URL}/>
+    {/* <App /> */}
   </React.StrictMode>,
 )
+
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//   <React.StrictMode>    
+//     <App />
+//   </React.StrictMode>,
+// )
